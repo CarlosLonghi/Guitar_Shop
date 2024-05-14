@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Dancing_Script } from "next/font/google";
 import "./globals.css";
+import Image from "next/image";
 
-const roboto = Roboto({ 
-  weight: ["300", "400", "500", "700"],
+import logoImage from "@/assets/logo.png"
+
+const dancingScript = Dancing_Script({
+  subsets: ['latin'],
+  weight: ["400", "500", "600"],
   preload: false,
 });
 
@@ -19,8 +23,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={roboto.className}>
-        <main className="flex justify-center items-center min-h-screen bg-zinc-950 text-zinc-200">
+      <body className={`${dancingScript.className} min-h-screen dark antialiased`}>
+        <header className="max-w-screen-lg m-auto px-8 py-4 flex">
+          <div className="flex flex-col items-center gap-2">
+            <div className="p-3 bg-primary-foreground rounded-full ring-secondary ring-4">
+              <Image width={56} className="-ml-1" src={logoImage} alt="Logo" />
+            </div>
+            <span className="text-lg font-semibold">Guitar Shop</span>
+          </div>
+        </header>
+        <main className="max-w-screen-lg m-auto px-8">
           {children}
         </main>
       </body>
