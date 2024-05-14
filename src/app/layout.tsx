@@ -32,9 +32,8 @@ export default function RootLayout({
             <span className="text-lg font-semibold">Guitar Shop</span>
           </div>
         </header>
-        <main className="max-w-screen-lg m-auto px-8">
-          {children}
-        </main>
+        
+        {children}
       </body>
     </html>
   );
