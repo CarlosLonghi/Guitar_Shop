@@ -1,6 +1,6 @@
-'use client'
+// 'use client'
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import {
   Carousel,
@@ -12,94 +12,67 @@ import {
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
-import Autoplay from "embla-carousel-autoplay"
+// import Autoplay from "embla-carousel-autoplay"
 
-import guitar1 from '@/assets/guitars/guitar-1.png'
-import guitar2 from '@/assets/guitars/guitar-2.png'
-import guitar3 from '@/assets/guitars/guitar-3.png'
-import guitar4 from '@/assets/guitars/guitar-4.png'
-import guitar5 from '@/assets/guitars/guitar-5.png'
-import guitar6 from '@/assets/guitars/guitar-6.png'
-import guitar7 from '@/assets/guitars/guitar-7.png'
-import guitar8 from '@/assets/guitars/guitar-8.png'
-import guitar9 from '@/assets/guitars/guitar-9.png'
-import guitar10 from '@/assets/guitars/guitar-10.png'
+import { stripe } from "@/lib/stripe";
+import Stripe from "stripe";
 
-const data = [
-  {
-    product: 'Guitarra Jackson',
-    price: 18999,
-    image: guitar1
-  },
-  {
-    product: 'Guitarra Ltd',
-    price: 7999,
-    image: guitar2
-  },
-  {
-    product: 'Guitarra Esp',
-    price: 12999,
-    image: guitar3
-  },
-  {
-    product: 'Guitarra Ibanez',
-    price: 9999,
-    image: guitar4
-  },
-  {
-    product: 'Guitarra Ibanez',
-    price: 16299,
-    image: guitar5
-  },
-  {
-    product: 'Guitarra Custom',
-    price: 36299,
-    image: guitar6
-  },
-  {
-    product: 'Guitarra Charvel',
-    price: 26299,
-    image: guitar7
-  },
-  {
-    product: 'Guitarra Ibanez',
-    price: 10299,
-    image: guitar8
-  },
-  {
-    product: 'Guitarra Ibanez Gio',
-    price: 11299,
-    image: guitar9
-  },
-  {
-    product: 'Guitarra Ibanez',
-    price: 12299,
-    image: guitar10
-  }
-]
-export default function Home() {
-  const plugin = React.useRef(
-    Autoplay({ delay: 3500, stopOnInteraction: true })
-  )
+interface Product {
+  id: string;
+  name: string;
+  imageUrl: string;
+  price: number;
+}
+
+export default async function Home() {
+  // const plugin = React.useRef(
+  //   Autoplay({ delay: 3500, stopOnInteraction: true })
+  // )
+
+  const response = await stripe.products.list({
+    expand: ['data.default_price']
+  })
+
+  const products: Product[] = response.data.map((product) => {
+    const price = product.default_price as Stripe.Price
+    if(!price.unit_amount) {
+      return null
+    }
+
+    return {
+      id: product.id,
+      name: product.name,
+      imageUrl: product.images[0],
+      price: price.unit_amount / 100,
+    }
+  }).filter(Boolean) as Product[];
+
   return (
     <main className="flex pl-8 ml-auto max-w-[calc(100vw-((100vw-1024px)/2))]">
       <Carousel
         className="relative"
-        plugins={[plugin.current]}
-        onMouseEnter={plugin.current.stop}
-        onMouseLeave={plugin.current.play}
+        // plugins={[plugin.current]}
+        // onMouseEnter={plugin.current.stop}
+        // onMouseLeave={plugin.current.play}
       >
         <CarouselContent>
-          {data.map((item, index) => (
-            <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-              <Card className="group p-1 relative bg-gradient-to-b from-background to-secondary/50 flex flex-col justify-center overflow-hidden rounded-md h-full">
-                <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <Image className="object-contain max-h-[650px] h-5/6 w-full" width={250} height={480} src={item.image} alt=""/>
+          {products.map((product) => (
+            <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-1/3">
+              <Card className="group p-1 relative bg-gradient-to-b from-background to-secondary/50 flex flex-col justify-center overflow-hidden rounded-md">
+                <CardContent className="flex aspect-square items-center justify-center mb-10 mt-4 lg:mb-16">
+                  <Image 
+                    className="object-contain h-[380px] md:h-[480px] lg:h-[530px]" 
+                    width={255} 
+                    height={530} 
+                    src={product.imageUrl} 
+                    alt={product.name}
+                    priority
+                  />
                 </CardContent>
-                <CardFooter className="absolute p-4 bottom-1 right-1 left-1 flex translate-y-full justify-between items-center rounded-md bg-secondary-foreground/10 opacity-0 transition-all duration-200 ease-in group-hover:opacity-100 group-hover:translate-y-0">
-                  <strong className="text-lg">{item.product}</strong>
+                <CardFooter className="absolute p-4 bottom-1 right-1 left-1 flex opacity-100 justify-between items-center rounded-md bg-secondary-foreground/10 transition-all duration-200 ease-in md:opacity-0 md:translate-y-full md:group-hover:opacity-100 md:group-hover:translate-y-0">
+                  <strong className="text-lg">{product.name}</strong>
                   <span className="text-base font-semibold text-emerald-500">
-                    {(item.price).toLocaleString('pt-BR', {
+                    {(product.price).toLocaleString('pt-BR', {
                       style: 'currency',
                       currency: 'BRL',
                     })}
