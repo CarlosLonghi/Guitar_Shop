@@ -16,6 +16,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 import { stripe } from "@/lib/stripe";
 import Stripe from "stripe";
+import Link from "next/link";
 
 interface Product {
   id: string;
@@ -58,27 +59,29 @@ export default async function Home() {
         <CarouselContent>
           {products.map((product) => (
             <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-1/3">
-              <Card className="group p-1 relative bg-gradient-to-b from-background to-secondary/50 flex flex-col justify-center overflow-hidden rounded-md">
-                <CardContent className="flex aspect-square items-center justify-center mb-10 mt-4 lg:mb-16">
-                  <Image 
-                    className="object-contain h-[380px] md:h-[480px] lg:h-[530px]" 
-                    width={255} 
-                    height={530} 
-                    src={product.imageUrl} 
-                    alt={product.name}
-                    priority
-                  />
-                </CardContent>
-                <CardFooter className="absolute p-4 bottom-1 right-1 left-1 flex opacity-100 justify-between items-center rounded-md bg-secondary-foreground/10 transition-all duration-200 ease-in md:opacity-0 md:translate-y-full md:group-hover:opacity-100 md:group-hover:translate-y-0">
-                  <strong className="text-lg">{product.name}</strong>
-                  <span className="text-base font-semibold text-emerald-500">
-                    {(product.price).toLocaleString('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    })}
-                  </span>
-                </CardFooter>
-              </Card>
+              <Link href={`/product/${product.id}`}>
+                <Card className="group p-1 relative bg-gradient-to-b from-background to-secondary/50 flex flex-col justify-center overflow-hidden rounded-md">
+                  <CardContent className="flex aspect-square items-center justify-center mb-10 mt-4 lg:mb-16">
+                    <Image 
+                      className="object-contain h-[380px] md:h-[480px] lg:h-[530px]" 
+                      width={255} 
+                      height={530} 
+                      src={product.imageUrl} 
+                      alt={product.name}
+                      priority
+                    />
+                  </CardContent>
+                  <CardFooter className="absolute p-4 bottom-1 right-1 left-1 flex justify-between items-center rounded-md bg-secondary-foreground/10 transition-all duration-200 ease-in md:translate-y-16 md:group-hover:translate-y-0">
+                    <strong className="text-xl">{product.name}</strong>
+                    <span className="text-base font-semibold text-emerald-500">
+                      {(product.price).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      })}
+                    </span>
+                  </CardFooter>
+                </Card>
+              </Link>
             </CarouselItem>
           ))}
         </CarouselContent>

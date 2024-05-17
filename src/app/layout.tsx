@@ -4,6 +4,7 @@ import "./globals.css";
 import Image from "next/image";
 
 import logoImage from "@/assets/logo.png"
+import Link from "next/link";
 
 const dancingScript = Dancing_Script({
   subsets: ['latin'],
@@ -23,12 +24,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${dancingScript.className} min-h-screen dark antialiased`}>
-        <header className="max-w-screen-lg m-auto px-8 py-4 flex">
+      <body className={`${dancingScript.className} min-h-screen flex flex-col gap-16 items-center dark antialiased`}>
+        <header className="max-w-screen-lg w-full px-8 py-4 flex">
           <div className="flex flex-col items-center gap-2">
-            <div className="p-3 bg-primary-foreground rounded-full ring-secondary ring-4">
+            <Link href={'/'} className="p-3 bg-primary-foreground rounded-full ring-secondary ring-4">
               <Image width={56} className="-ml-1" src={logoImage} alt="Logo" />
-            </div>
+            </Link>
             <span className="text-lg font-semibold">Guitar Shop</span>
           </div>
         </header>
