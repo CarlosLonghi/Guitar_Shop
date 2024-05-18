@@ -49,7 +49,7 @@ export default async function Home() {
   }).filter(Boolean) as Product[];
 
   return (
-    <main className="flex pl-8 ml-auto max-w-[calc(100vw-((100vw-1024px)/2))]">
+    <main className="flex ml-auto max-w-[calc(100vw-((100vw-1024px)/2))]">
       <Carousel
         className="relative"
         // plugins={[plugin.current]}

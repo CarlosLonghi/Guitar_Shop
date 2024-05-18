@@ -27,7 +27,7 @@ export default async function ProductDetails({ params }: RouteParamsProps) {
 	}
 
 	return (
-		<main className="grid grid-cols-2 items-stretch gap-16 px-8 max-w-screen-lg">
+		<main className="grid grid-cols-2 items-stretch gap-16 max-w-screen-lg">
 			<div className="w-full max-w-xl flex items-center justify-center object-contain p-4 rounded-md bg-gradient-to-b from-background to-secondary/50">
 				<Image 
 					className="object-contain h-[380px] md:h-[480px] lg:h-[530px]" 
