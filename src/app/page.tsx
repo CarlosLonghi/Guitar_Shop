@@ -59,7 +59,7 @@ export default async function Home() {
         <CarouselContent>
           {products.map((product) => (
             <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-1/3">
-              <Link href={`/product/${product.id}`}>
+              <Link href={`/product/${product.id}`} prefetch={true}>
                 <Card className="group p-1 relative bg-gradient-to-b from-background to-secondary/50 flex flex-col justify-center overflow-hidden rounded-md">
                   <CardContent className="flex aspect-square items-center justify-center mb-10 mt-4 lg:mb-16">
                     <Image 
