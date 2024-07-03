@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${dancingScript.className} min-h-screen flex flex-col gap-16 pl-6 pr-4 items-center dark antialiased`}>
+      <body className={`${dancingScript.className} min-h-screen flex flex-col gap-8 pl-6 pr-4 pb-8 items-center dark antialiased`}>
         <header className="max-w-screen-lg w-full py-4 flex">
           <div className="flex flex-col items-center gap-2">
             <Link href={'/'} className="p-3 bg-primary-foreground rounded-full ring-secondary ring-4">

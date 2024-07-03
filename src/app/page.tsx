@@ -51,7 +51,6 @@ export default async function Home() {
   return (
     <main className="flex ml-auto max-w-[calc(100vw-((100vw-1024px)/2))]">
       <Carousel
-        className="relative"
         // plugins={[plugin.current]}
         // onMouseEnter={plugin.current.stop}
         // onMouseLeave={plugin.current.play}
