@@ -24,9 +24,14 @@ export default async function ProductDetails({ params }: RouteParamsProps) {
 		description: response.description,
 		imageUrl: response.images[0],
 		price: price.unit_amount / 100,
+		defaultPriceId: price.id
 	}
-
-	// await new Promise((resolve) => setTimeout(resolve, 9000))
+ 
+	// TO DO: Ao clicar no botão comprar deve ser enviado ao checkout do stripe
+	// function handleBuyProduct() {
+	// 	console.log(product.defaultPriceId);
+	// }
+	// handleBuyProduct();
 
 	return (
 		<main className="grid grid-cols-1 items-center gap-10 max-w-screen-lg lg:grid-cols-2 lg:gap-16 lg:items-stretch">
@@ -52,7 +57,12 @@ export default async function ProductDetails({ params }: RouteParamsProps) {
 					{product.description}
 				</p>
 
-				<Button size={"lg"} className="mt-auto text-lg font-semibold">Comprar</Button>
+				<Button 
+					className="mt-auto text-lg font-semibold"
+					size={"lg"}
+				>
+					Comprar
+				</Button>
 			</div>
 		</main>
 	)
