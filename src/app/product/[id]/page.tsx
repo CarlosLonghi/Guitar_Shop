@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { BuyButton } from "@/components/buy-button"
 import { stripe } from "@/lib/stripe"
 import Image from "next/image"
 import Stripe from "stripe"
@@ -27,12 +27,6 @@ export default async function ProductDetails({ params }: RouteParamsProps) {
 		defaultPriceId: price.id
 	}
  
-	// TO DO: Ao clicar no botão comprar deve ser enviado ao checkout do stripe
-	// function handleBuyProduct() {
-	// 	console.log(product.defaultPriceId);
-	// }
-	// handleBuyProduct();
-
 	return (
 		<main className="grid grid-cols-1 items-center gap-10 max-w-screen-lg lg:grid-cols-2 lg:gap-16 lg:items-stretch">
 			<div className="w-full max-w-xl flex items-center justify-center object-contain p-4 m-auto rounded-md bg-gradient-to-b from-background to-secondary/50">
@@ -57,12 +51,7 @@ export default async function ProductDetails({ params }: RouteParamsProps) {
 					{product.description}
 				</p>
 
-				<Button 
-					className="mt-auto text-lg font-semibold"
-					size={"lg"}
-				>
-					Comprar
-				</Button>
+				<BuyButton defaultPriceId={product.defaultPriceId}/>
 			</div>
 		</main>
 	)

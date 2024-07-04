@@ -1,7 +1,7 @@
 import { stripe } from "@/lib/stripe"
 
 export async function GET() {
-  const priceId = 'price_1PGgZED2HCMoyV8XusnZBgjJ'
+  const priceId = 'price_1PGrFQD2HCMoyV8X9Utth4LD'
 
   const successUrl = `${process.env.NEXT_URL}/success`
   const cancelUrl = `${process.env.NEXT_URL}/`
@@ -17,5 +17,6 @@ export async function GET() {
     success_url: successUrl,
     cancel_url: cancelUrl
   })
-  return Response.json({checkoutUrl: checkoutSession.url})
+  
+  return Response.json({ checkoutUrl: checkoutSession.url })
 }
