@@ -1,31 +1,38 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe"
 
-export async function GET(request: NextApiRequest, response: NextApiResponse) {
-  const { priceId } = request.body;
-  
-  if (request.method !== "POST") {
-    return response.status(405).json({ error: "Method not allowed." });
+export async function POST(request: NextRequest) {
+  let priceId;
+      
+  try {
+    const body = await request.json();
+    priceId = body.priceId;
+  } catch (error) {
+    return NextResponse.json({ error: 'Invalid request body.' }, { status: 400 });
   }
 
   if (!priceId) {
-    return response.status(400).json({ error: 'Price not found.' });
+    return NextResponse.json({ error: 'Price not found.' }, { status: 400 });
   }
 
-  const successUrl = `${process.env.NEXT_URL}/success`
-  const cancelUrl = `${process.env.NEXT_URL}/`
+  try {
+    const successUrl = `${process.env.NEXT_URL}/success`;
+    const cancelUrl = `${process.env.NEXT_URL}/`;
 
-  const checkoutSession = await stripe.checkout.sessions.create({
-    success_url: successUrl,
-    cancel_url: cancelUrl,
-    mode: 'payment',
-    line_items: [
-      {
-        price: priceId,
-        quantity: 1
-      }
-    ]
-  })
-  
-  return response.status(201).json({ checkoutUrl: checkoutSession.url })
+    const checkoutSession = await stripe.checkout.sessions.create({
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      mode: 'payment',
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+    });
+
+    return NextResponse.json({ checkoutUrl: checkoutSession.url }, { status: 201 });
+  } catch (error) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+  }
 }
