@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { stripe } from "@/lib/stripe";
 import Image from "next/image";
 import Link from "next/link";
-import Custom404 from "../404";
+import { redirect } from 'next/navigation';
 
 interface Product {
   name: string;
@@ -18,7 +18,13 @@ interface Session {
       };
     }[];
   };
-  customer_details: { name: string };
+  customer_details: { 
+    name: string 
+  };
+}
+
+interface SuccessPageProps {
+  searchParams: { session_id: string };
 }
 
 async function getSessionData(sessionId: string): Promise<Session | null> {
@@ -33,12 +39,17 @@ async function getSessionData(sessionId: string): Promise<Session | null> {
   }
 }
 
-export default async function Success({ searchParams }: { searchParams: { session_id: string } }) {
+export default async function Success({ searchParams }: SuccessPageProps) {
   const sessionId = searchParams.session_id;
+
+  if (!sessionId) {
+    redirect('/');
+  }
+
   const session = await getSessionData(sessionId);
-  
+
   if (!session) {
-    return <Custom404 />; 
+    redirect('/');
   }
 
   const customerName = session.customer_details.name;
