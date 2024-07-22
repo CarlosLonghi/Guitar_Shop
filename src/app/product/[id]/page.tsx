@@ -1,6 +1,7 @@
 import { BuyButton } from "@/components/buy-button"
 import { stripe } from "@/lib/stripe"
 import Image from "next/image"
+import { redirect } from "next/navigation"
 import Stripe from "stripe"
 
 interface RouteParamsProps {
@@ -10,14 +11,24 @@ interface RouteParamsProps {
 export default async function ProductDetails({ params }: RouteParamsProps) {
 	const productId = params.id
 
-	const response = await stripe.products.retrieve(productId, {
-    expand: ['default_price']
-  })
+	if (!productId) {
+    redirect("/");
+  }
+
+	let response;
+	try {
+		response = await stripe.products.retrieve(productId, {
+			expand: ['default_price']
+		})	
+	} catch (error) {
+		redirect("/")
+	}
 
 	const price = response.default_price as Stripe.Price
-	if(!price.unit_amount) {
-		return null
+	if(!price || !price.unit_amount) {
+		redirect("/")
 	}
+	
 	const product = {
 		id: response.id,
 		name: response.name,
